@@ -9,7 +9,7 @@ function widget:GetInfo()
 	}
 end
 
-include "LuaRules/Configs/customcmds.h.lua"
+VFS.Include("LuaRules/Configs/customcmds.h.lua")
 
 local TIER_COLORS = {
     {0.1, 0.1, 0.1, 0.9},
