@@ -1,106 +1,92 @@
-return { arena_hq = {
-    unitname                      = [[arena_hq]],
-    name                          = [[Arena HQ]],
-    description                   = [[Area Field HQ (spawns units)]],
-    acceleration                  = 0,
-    activateWhenBuilt             = true,
-    brakeRate                     = 0,
-    buildCostMetal                = 1000,
-    builder                       = false,
-    buildPic                      = [[pw_hq.png]],
-    canSelfDestruct               = false,
-    category                      = [[FLOAT UNARMED]],
-    corpse                        = [[DEAD]],
-  
-    customParams                  = {
-        soundselect = "building_select1",
-    },
-  
-    energyUse                     = 0,
-    energyMake                    = 1000,
-    energyStorage                 = 100000,
-    metalStorage                  = 100000,
-    explodeAs                     = [[ATOMIC_BLAST]],
-    footprintX                    = 8,
-    footprintZ                    = 8,
-    levelGround                   = false,
-    iconType                      = [[pw_assault]],
-    idleAutoHeal                  = 5,
-    idleTime                      = 1800,
-    maxDamage                     = 10000,
-    maxSlope                      = 18,
-    maxVelocity                   = 0,
-    minCloakDistance              = 150,
-    noAutoFire                    = false,
-    objectName                    = [[pw_hq.s3o]],
-    reclaimable                   = false,
-    script                        = [[pw_hq.lua]],
-    selfDestructAs                = [[ATOMIC_BLAST]],
-    selfDestructCountdown         = 60,
-    sightDistance                 = 330,
-    waterline                     = 10,
-    turnRate                      = 0,
-    useBuildingGroundDecal        = true,
-    canMove                       = true,
-    canAttack                     = true,
-    canFight                      = true,
-    canPatrol                     = true,
-    canGuard                      = true,
-    reclaimable                   = false,
-    canSelfD                      = false,
-    moveState                     = 1,
-    workerTime                    = 0,
+local unitDef = {
+  -- General
+  unitname                      = [[arena_hq]],
+  name                          = [[Arena HQ]],
+  description                   = [[Area Field HQ (spawns units)]],
+  buildPic                      = [[pw_hq.png]],
+  objectName                    = [[pw_hq.s3o]],
+  script                        = [[area_hq.lua]],
+  maxDamage                     = 10000,
+  autoHeal                      = 100,
+  idleAutoHeal                  = 100,
+  idleTime                      = 1800,
+  buildCostMetal                = 1000,
+  reclaimable                   = false,
+  capturable                    = false,
+  iconType                      = [[pw_assault]],
+  corpse                        = [[DEAD]],
+  explodeAs                     = [[ATOMIC_BLAST]],
+  selfDestructAs                = [[ATOMIC_BLAST]],
 
-    weapons = {
-      {
-        def                       = "BOGUS_FAKE_TARGETER",
-        badTargetCategory         = "FIXEDWING",
-        onlyTargetCategory        = "FIXEDWING LAND SINK TURRET SHIP SWIM FLOAT GUNSHIP HOVER",
-      },
-    },
-    
-    weaponDefs             = {
-      BOGUS_FAKE_TARGETER = {
-        name                    = [[Bogus Fake Targeter]],
-        avoidGround             = false, -- avoid nothing, else attempts to move out to clear line of fine
-        avoidFriendly           = false,
-        avoidFeature            = false,
-        avoidNeutral            = false,
-  
-        damage                  = {
-          default = 11.34,
-          planes  = 11.34,
-          subs    = 0.567,
-        },
-  
-        explosionGenerator      = [[custom:FLASHPLOSION]],
-        noSelfDamage            = true,
-        range                   = 300,
-        reloadtime              = 1,
-        tolerance               = 5000,
-        turret                  = true,
-        weaponType              = [[StarburstLauncher]],
-        weaponVelocity          = 500,
-      },
-    },
+  -- Resources
+  metalStorage                  = 100000,
+  energyStorage                 = 100000,
+  energyUse                     = 0,
+  energyMake                    = 1000,
 
-    featureDefs                   = {
-      DEAD  = {
-        blocking         = true,
-        resurrectable    = 0,
-        featureDead      = [[HEAP]],
-        footprintX       = 8,
-        footprintZ       = 8,
-        object           = [[pw_hq_dead.s3o]],
-      },
-  
-      HEAP  = {
-        blocking         = false,
-        footprintX       = 6,
-        footprintZ       = 6,
-        object           = [[debris4x4b.s3o]],
-      },
+  -- Sensors
+  activateWhenBuilt             = true,
+  sightDistance                 = 330,
+
+  -- Cloaking
+  minCloakDistance              = 150,
+
+  -- Commands
+  canMove                       = true,
+  canAttack                     = true,
+  canFight                      = true,
+  canPatrol                     = true,
+  canGuard                      = true,
+  canSelfD                      = false,
+  moveState                     = 1,
+
+  -- Builder
+  builder                       = true,
+  workerTime                    = 0.001,
+
+  -- Movement & Placement
+  footprintX                    = 8,
+  footprintZ                    = 8,
+  levelGround                   = true,
+  maxWaterDepth                 = 0,
+  waterline                     = 10,
+  maxVelocity                   = 0,
+  acceleration                  = 0,
+  brakeRate                     = 0,
+  turnRate                      = 0,
+
+  -- Categories
+  category                      = [[FLOAT UNARMED]],
+
+  -- buildingGroundDecalSizeX
+  useBuildingGroundDecal        = true,
+  buildingGroundDecalType       = [[factorygunship_aoplane.dds]],
+  buildingGroundDecalSizeX      = 10,
+  buildingGroundDecalSizeY      = 10,
+  buildingGroundDecalDecaySpeed = 30,
+
+  -- Other
+  customParams                  = {
+    soundselect = "building_select1",
+  },
+
+  featureDefs                   = {
+    DEAD  = {
+      blocking         = true,
+      resurrectable    = 0,
+      featureDead      = [[HEAP]],
+      footprintX       = 8,
+      footprintZ       = 8,
+      object           = [[pw_hq_dead.s3o]],
     },
   
-  } }
-  
+    HEAP  = {
+      blocking         = false,
+      footprintX       = 6,
+      footprintZ       = 6,
+      object           = [[debris4x4b.s3o]],
+    },
+  },
+}
+
+return {arena_hq = unitDef}
