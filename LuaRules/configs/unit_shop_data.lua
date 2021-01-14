@@ -9,46 +9,47 @@ local tierSize = {
 
 local tierUnits = {
     {
-        "shieldscout", -- dirtbag
         "vehscout", -- dart
-        "jumpscout", -- puppy
         "spiderscout", -- flea
         "amphraid", -- duck
         "hoverraid", -- dagger
         "vehraid", -- scorcher
         "shieldraid", -- bandit
         "cloakraid", -- glaive
-        "tankraid", -- kodachi
-        "gunshipraid", -- locust
         "amphriot", -- scallop
-        "spideremp", -- venom
         "cloakskirm", -- ronin
-        "vehsupport", -- fencer
         "shieldskirm", -- rogue
-        "spiderassault", -- hermit
-        "shieldassault", -- thug
         "cloakaa", -- gremlin
-        "gunshipemp", -- gnat
+        "shieldriot", -- outlaw
+        "planelightscout", -- sparrow
         "planefighter", -- swift
+        "jumpraid", -- pyro
+        "spiderassault", -- hermit
+        "spiderriot", -- redback
+        "vehriot", -- ripper
+        "amphimpulse", -- archer
+        "jumpskirm", -- moderator
+        "cloakriot", -- reaver
     },
     {
+        "spideremp", -- venom
+        "shieldassault", -- thug
+        "shieldscout", -- dirtbag
+        "vehsupport", -- fencer
+        "gunshipemp", -- gnat
+        "tankraid", -- kodachi
+        "gunshipraid", -- locust
         "shieldbomb", -- snitch
         "cloakbomb", -- imp
         "amphbomb", -- limpet
         "gunshipbomb", -- blastwing
-        "jumpraid", -- pyro
         "tankheavyraid", -- blitz
         "hoverheavyraid", -- bolas
         "cloakheavyraid", -- scythe
-        "shieldriot", -- outlaw
-        "spiderriot", -- redback
-        "cloakriot", -- reaver
-        "vehriot", -- ripper
-        "amphimpulse", -- archer
+
         "vehassault", -- ravager
         "amphfloater", -- buoy
         "hoverskirm", -- scalpel
-        "jumpskirm", -- moderator
         "amphaa", -- angler
         "hoveraa", -- flail
         "shieldaa", -- vandal
@@ -57,51 +58,51 @@ local tierUnits = {
         "gunshipskirm", -- harpy
         "gunshiptrans", -- charon
         "planeheavyfighter", -- raptor
-        "planelightscout", -- sparrow
+        "spiderantiheavy", -- widow
+        "amphlaunch", -- lobster
+        "veharty", -- badger
+        "hoverassault", -- halberd
+        "tankriot", -- ogre
+        "hoverriot", -- mace
     },
     {
-        "hoverriot", -- mace
         "jumpblackhole", -- placeholder
-        "tankriot", -- ogre
         "cloakassault", -- knight
         "vehcapture", -- dominatrix
         "spiderskirm", -- recluse
-        "hoverassault", -- halberd
         "jumpassault", -- jack
-        "veharty", -- badger
         "vehheavyarty", -- impaler
         "shieldarty", -- racketeer
         "shieldshield", -- aspis
-        "amphlaunch", -- lobster
         "spideraa", -- tarantula
         "tankaa", -- ettin
         "gunshipheavytrans", -- hercules
         "planescout", -- owl
+        "jumpscout", -- puppy
+        "gunshipassault", -- revenant
+        "tankarty", -- emissary
+        "jumpbomb", -- skuttle
+        "tankassault", -- minotaur
     },
     {
-        "jumpbomb", -- skuttle
         "striderdante", -- dante
-        "tankassault", -- minotaur
         "jumpsumo", -- jugglenaut
         "shieldfelon", -- felon
         "cloakjammer", -- iris
         "amphtele", -- djinn
-        "spiderantiheavy", -- widow
         "striderantiheavy", -- ultimatum
         "cloaksnipe", -- phantom
-        "tankarty", -- emissary
         "hoverarty", -- lance
         "jumparty", -- firewalker
         "tankheavyarty", -- tremor
         "jumpaa", -- toad
         "gunshipheavyskirm", -- nimbus
-        "gunshipassault", -- revenant
+        "gunshipkrow", -- krow
+        "amphassault", -- grizzly
+        "tankheavyassault", -- cyclops
     },
     {
         "spidercrabe", -- crab
-        "amphassault", -- grizzly
-        "tankheavyassault", -- cyclops
-        "gunshipkrow", -- krow
         "nebula", -- Nebula
         "striderscorpion", -- scorpion
         "striderbantha", -- paladin
@@ -125,29 +126,29 @@ local tierOdds = {
         [5] = 0,
     },
     [3] = {
-        [1] = 65,
-        [2] = 35,
+        [1] = 60,
+        [2] = 40,
         [3] = 0,
         [4] = 0,
         [5] = 0,
     },
     [4] = {
-        [1] = 50,
-        [2] = 35,
-        [3] = 15,
+        [1] = 40,
+        [2] = 40,
+        [3] = 20,
         [4] = 0,
         [5] = 0,
     },
     [5] = {
-        [1] = 40,
-        [2] = 35,
+        [1] = 35,
+        [2] = 40,
         [3] = 25,
         [4] = 0,
         [5] = 0,
     },
     [6] = {
-        [1] = 35,
-        [2] = 30,
+        [1] = 30,
+        [2] = 35,
         [3] = 30,
         [4] = 5,
         [5] = 0,
@@ -192,63 +193,63 @@ local tierOdds = {
 local levelData = {
     [1] = {
         rerollCost = 75,
-        upgradeCost = 100,
+        upgradeCost = 200,
     },
     [2] = {
         rerollCost = 75,
-        upgradeCost = 200,
+        upgradeCost = 300,
     },
     [3] = {
         rerollCost = 75,
-        upgradeCost = 250,
+        upgradeCost = 350,
     },
     [4] = {
         rerollCost = 75,
-        upgradeCost = 300,
+        upgradeCost = 400,
     },
     [5] = {
         rerollCost = 75,
-        upgradeCost = 350,
+        upgradeCost = 450,
     },
     [6] = {
         rerollCost = 75,
-        upgradeCost = 400,
+        upgradeCost = 500,
     },
     [7] = {
         rerollCost = 75,
-        upgradeCost = 450,
+        upgradeCost = 500,
     },
     [8] = {
         rerollCost = 75,
-        upgradeCost = 500,
+        upgradeCost = 550,
     },
     [9] = {
         rerollCost = 75,
-        upgradeCost = 550,
+        upgradeCost = 600,
     },
     [10] = {
         rerollCost = 75,
-        upgradeCost = 600,
+        upgradeCost = 700,
     },
     [11] = {
         rerollCost = 75,
-        upgradeCost = 650,
+        upgradeCost = 800,
     },
     [12] = {
         rerollCost = 75,
-        upgradeCost = 750,
+        upgradeCost = 900,
     },
     [13] = {
         rerollCost = 75,
-        upgradeCost = 700,
+        upgradeCost = 1000,
     },
     [14] = {
         rerollCost = 75,
-        upgradeCost = 800,
+        upgradeCost = 1200,
     },
     [15] = {
         rerollCost = 75,
-        upgradeCost = 850,
+        upgradeCost = 1500,
     },
 }
 
