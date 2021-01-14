@@ -21,6 +21,7 @@ local function replaceStartUnit(unitName)
             local nearbyUnits = Spring.GetUnitsInCylinder(spawn.x, spawn.z, 50, teamID)
             local unitID = Spring.CreateUnit(unitName, spawn.x, spawn.y, spawn.z, spawn.facing, teamID)
             Spring.SetUnitRulesParam(unitID, "facplop", 1, {inlos = true})
+            Spring.AddTeamResource(teamID, "metal", 300)
             table.insert(replacements, unitID)
             if nearbyUnits and #nearbyUnits then
                 for _, unitID in pairs(nearbyUnits) do
