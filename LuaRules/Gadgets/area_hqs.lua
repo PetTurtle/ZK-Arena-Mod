@@ -188,8 +188,9 @@ local function OnHQBuy(HQID, HQTeamID, buyUnitID)
             Spring.SetUnitRulesParam(HQID, "HQBuyUnit" .. buyUnitID, -1, LOS_ACCESS)
 
             local count = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitCount" .. i)
+            local metalCost = UnitDefs[ud].metalCost
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCount" .. i, count + 1, LOS_ACCESS)
-            Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor(UnitDefs[ud].metalCost * (count + 1) * 0.75), LOS_ACCESS)
+            Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor((metalCost - (metalCost * 0.15 * count)) * (count + 1)), LOS_ACCESS)
             return
         end
     end
