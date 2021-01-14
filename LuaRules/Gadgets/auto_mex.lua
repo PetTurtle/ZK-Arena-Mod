@@ -56,9 +56,16 @@ local buildings = {
 
 local function createMex(x, y, z, teamID)
     local unitID = Spring.CreateUnit(mexDefID, x, y, z, "n", teamID, true)
+    if unitID == nil then
+        unitID = Spring.CreateUnit(mexDefID, x, y, z, "n", NEUTRALTEAM, true)
+        if unitID == nil then
+            return
+        end
+    end
+
     GG.BuildUnit(unitID, 5)
-    Spring.SetUnitBlocking(unitID, true, false)
     mexs[unitID] = {
+        hp = 1,
         aliveTime = 5,
         buildings = {},
     }
@@ -93,6 +100,17 @@ local function getUpgradeUD()
     return buildings[1].ud
 end
 
+local function mexHPMulti(mexID, multiplier)
+    mexs[mexID].hp = mexs[mexID].hp + multiplier
+    GG.UnitScale(mexID, 1 + (mexs[mexID].hp * 0.1))
+    local originalHealth = UnitDefs[mexDefID].health
+    local currHP, currMaxHP = Spring.GetUnitHealth(mexID)
+    local newMaxHP = (originalHealth * mexs[mexID].hp)
+    local newHP = currHP * newMaxHP / currMaxHP
+    Spring.SetUnitMaxHealth(mexID, newMaxHP)
+    Spring.SetUnitHealth(mexID, newHP)
+end
+
 local function upgradeMex(mexID)
     local updateUD = getUpgradeUD()
     local x, y, z = getUpgradeLocation(mexID, updateUD)
@@ -101,6 +119,7 @@ local function upgradeMex(mexID)
         local updateID = Spring.CreateUnit(updateUD.id, x, y, z, "n", mexTeamID, true)
         GG.BuildUnit(updateID, 5)
         mexs[mexID].buildings[updateID] = true
+        mexHPMulti(mexID, 1)
     end
 end
 

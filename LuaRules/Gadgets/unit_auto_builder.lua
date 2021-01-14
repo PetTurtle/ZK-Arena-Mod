@@ -17,6 +17,9 @@ local unitsBuilding = {}
 local unitCount = 0
 
 local function buildUnit(unitID, metalSpeed)
+    if not Spring.ValidUnitID(unitID) or Spring.GetUnitIsDead(unitID) then
+        return
+    end
 
     local udID = Spring.GetUnitDefID(unitID)
     local metalCost = UnitDefs[udID].metalCost
