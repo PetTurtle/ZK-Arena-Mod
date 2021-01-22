@@ -178,7 +178,7 @@ local function OnHQBuy(HQID, HQTeamID, buyUnitID)
         return
     end
 
-    local unitCost = math.floor(UnitDefs[ud].cost)
+    local unitCost = math.floor(UnitDefs[ud].metalCost)
     if Spring.GetTeamResources(HQTeamID, "metal") < unitCost then
         return
     end
@@ -206,7 +206,7 @@ local function OnHQBuy(HQID, HQTeamID, buyUnitID)
 
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnit" .. i, ud, LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCount" .. i, 1, LOS_ACCESS)
-            Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor(UnitDefs[ud].cost), LOS_ACCESS)
+            Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor(UnitDefs[ud].metalCost), LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitTier" .. i, udTier, LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitPoolID" .. i, udPoolID, LOS_ACCESS)
             spendMetal(unitCost, HQTeamID)

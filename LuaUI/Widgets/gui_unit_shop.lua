@@ -86,7 +86,7 @@ local function updateUI()
 			buttonImages[i]:Invalidate()
 			buttons[i].backgroundColor = TIER_COLORS[buyUnitTier]
             buttons[i]:Invalidate()
-            buttonCostLabels[i]:SetCaption(math.floor(UnitDefs[ud].cost))
+            buttonCostLabels[i]:SetCaption(math.floor(UnitDefs[ud].metalCost))
 		end
 	end
 end
