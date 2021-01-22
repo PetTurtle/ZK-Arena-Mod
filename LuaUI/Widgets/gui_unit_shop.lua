@@ -59,7 +59,7 @@ local function updateUI()
 	local levelCost = Spring.GetUnitRulesParam(selectedHQID, "HQLevelCost")
 	local rerollCost = Spring.GetUnitRulesParam(selectedHQID, "HQRerollCost")
 
-	if HQLevel == 15 then
+	if HQLevel == 11 then
 		titleLabel:SetCaption("Unit Shop\n Max Level")
 		upgradeButton:SetCaption("Max Level")
 	else
