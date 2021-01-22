@@ -19,6 +19,7 @@ local NEUTRALTEAM = Spring.GetGaiaTeamID()
 local mexDefID = UnitDefNames["staticmex"].id
 local mexFeatureDefID = FeatureDefNames["staticmex_dead"].id
 local mexs = {}
+local mexQueue = {}
 
 local offset = {
 	[0] = {x = 1, z = 0},
@@ -133,6 +134,13 @@ function gadget:GameFrame(frame)
             end
         end
     end
+
+    -- Delay replacement mexes until the next frame after they're destroyed.
+    -- This lets cmd_mex_placement.lua's callbacks happen in the right order to mark the spot with the team-color who now owns it.
+    for _,m in ipairs(mexQueue) do
+        createMex(m.x, m.y, m.z, m.team)
+    end
+    mexQueue = {}
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerDefID, attackerTeam)
@@ -145,7 +153,7 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerD
 
         mexs[unitID] = nil
         local x, y, z = Spring.GetUnitPosition(unitID)
-        createMex(x, y, z, attackerTeam or NEUTRALTEAM)
+        mexQueue[#mexQueue+1] = {x=x, y=y, z=z, team=(attackerTeam or NEUTRALTEAM)}
     end
 end
 
