@@ -224,7 +224,8 @@ local function OnHQSell(HQID, HQTeamID, sellUnitID)
 
         local udTier = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitTier" .. sellUnitID)
         local udPoolID = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitPoolID" .. sellUnitID)
-        unitPools[udTier][udPoolID] = unitPools[udTier][udPoolID] + 1
+        local count = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitCount" .. sellUnitID)
+        unitPools[udTier][udPoolID] = unitPools[udTier][udPoolID] + count
     end
 end
 
