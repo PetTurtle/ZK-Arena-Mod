@@ -41,20 +41,25 @@ local function getRandomUnitForTier(tier)
         currentPoolSize = currentPoolSize + unitPools[tier][i]
     end
 
-    local ran = math.random(0, currentPoolSize)
-    for i = 1, #unitPools[tier] do
-        ran = ran - unitPools[tier][i]
-        if ran <= 0 then
-            unitPools[tier][i] = unitPools[tier][i] - 1
-            return tierUnits[tier][i], i
+    if currentPoolSize > 0 then
+        local ran = math.random(1, currentPoolSize)
+        for i = 1, #unitPools[tier] do
+            ran = ran - unitPools[tier][i]
+            if ran <= 0 then
+                unitPools[tier][i] = unitPools[tier][i] - 1
+                return tierUnits[tier][i], tier, i
+            end
         end
     end
 
+    if tier > 1 then
+        return getRandomUnitForTier(tier - 1)
+    end
     return -1
 end
 
 local function getHQUnitTier(HQLevel)
-    local ran = math.random(0, 100)
+    local ran = math.random(1, 100)
     local odds = tierOdds[HQLevel]
     ran = ran - odds[1]
     if (ran <= 0) then return 1 end
@@ -84,8 +89,7 @@ local function rerollHQ(unitID)
             unitPools[udTier][udPoolID] = unitPools[udTier][udPoolID] + 1
         end
 
-        local tier = getHQUnitTier(HQLevel)
-        local unitName, poolID = getRandomUnitForTier(tier)
+        local unitName, tier, poolID = getRandomUnitForTier(getHQUnitTier(HQLevel))
         if not (unitName == -1) then
             local ud = UnitDefNames[unitName].id
             Spring.SetUnitRulesParam(unitID, "HQBuyUnit" .. i, ud, LOS_ACCESS)
