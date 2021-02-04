@@ -13,59 +13,90 @@ if not gadgetHandler:IsSyncedCode() then
     return false
 end
 
-local unitsBuilding = {}
-local unitCount = 0
+local buildings = {}
+local buildingCount = 0
 
-local function buildUnit(unitID, metalSpeed)
-    if not Spring.ValidUnitID(unitID) or Spring.GetUnitIsDead(unitID) then
+local function addUnitAt(ID, unitID, metalPS, metalCost)
+    buildings[ID] = {
+        unitID = unitID,
+        buildSpeed = metalPS / metalCost,
+        metalPS = metalPS,
+        metalLeft = metalCost + 10,
+    }
+
+    if ID == buildingCount + 1 then
+        buildingCount = buildingCount + 1
+    end
+end
+
+local function removeUnitAt(ID)
+    buildings[ID] = nil
+end
+
+local function isValidUnit(unitID)
+    return Spring.ValidUnitID(unitID) and not Spring.GetUnitIsDead(unitID)
+end
+
+local function giveMetal(metalAmount, teamID)
+    Spring.Echo(metalAmount)
+    local teamMetal = Spring.GetTeamResources(teamID, "metal")
+    Spring.SetTeamResource(teamID, "m", teamMetal + metalAmount)
+end
+
+local function buildUnit(unitID, metalPS)
+    if not isValidUnit(unitID) then
         return
     end
 
-    local udID = Spring.GetUnitDefID(unitID)
-    local metalCost = UnitDefs[udID].metalCost
-    local buildSpeed = metalSpeed / metalCost
-    local maxHP = select(2, Spring.GetUnitHealth(unitID))
-    Spring.SetUnitHealth(unitID, {health = maxHP * 0.5})
+    local unitDefID = Spring.GetUnitDefID(unitID)
+    local metalCost = UnitDefs[unitDefID].metalCost
 
-    for i = 1, unitCount do
-        if unitsBuilding[i] == nil then
-            unitsBuilding[i] = {unitID, buildSpeed, buildSpeed, maxHP}
+    for i = 1, buildingCount do
+        if buildings[i] == nil then
+            addUnitAt(i, unitID, metalPS, metalCost)
             return
         end
     end
 
-    unitsBuilding[unitCount + 1] = {unitID, buildSpeed, buildSpeed, maxHP}
-    unitCount = unitCount + 1
+    addUnitAt(buildingCount + 1, unitID, metalPS, metalCost)
 end
 
 function gadget:GameFrame(frame)
-    if frame % 30 == 0 then
-        for i = 1, unitCount do
-            if not (unitsBuilding[i] == nil) then
-                if Spring.GetUnitIsDead(unitsBuilding[i][1]) then
-                    unitsBuilding[i] = nil
 
-                elseif not (unitsBuilding[i] == nil) then
+    if not (frame % 30 == 0) then
+        return
+    end
 
-                    unitsBuilding[i][3] = unitsBuilding[i][3] + unitsBuilding[i][2]
-                    if unitsBuilding[i][3] >= 1 then
-                        Spring.SetUnitHealth(unitsBuilding[i][1], {build = 1})
-                        unitsBuilding[i] = nil
+    for i = 1, buildingCount do
+        local building = buildings[i]
+        if not (building == nil) then
+            if not isValidUnit(building.unitID) then
+                removeUnitAt(i)
 
-                    else
-                        local unitHealth = Spring.GetUnitHealth(unitsBuilding[i][1])
+            else
+                local health, maxHealth, _, _, buildProgress = Spring.GetUnitHealth(building.unitID)
+                
+                if health then
+                    building.metalLeft = building.metalLeft - building.metalPS
 
-                        if unitHealth then
-                            local healthIncrease = unitsBuilding[i][4] * unitsBuilding[i][2]
-                            local newHealth = math.min(unitHealth + healthIncrease, unitsBuilding[i][4])
-                            Spring.SetUnitHealth(unitsBuilding[i][1], {health = newHealth, build = unitsBuilding[i][3]})
-                        else
-                            unitsBuilding[i] = nil
-                        end
+                    local newHealth = math.min(health + (maxHealth * building.buildSpeed), maxHealth)
+                    local newBuild = math.min(buildProgress + building.buildSpeed, 1)
+
+                    Spring.SetUnitHealth(building.unitID, {health = newHealth, build = newBuild})
+
+                    if building.metalLeft <= 0 then
+                        removeUnitAt(i)
+
+                    elseif buildProgress == 1 then
+                        local teamID = Spring.GetUnitTeam(building.unitID)
+                        giveMetal(building.metalLeft, teamID)
+                        removeUnitAt(i)
+
                     end
+                else
+                    removeUnitAt(i)
                 end
             end
-
         end
     end
 end
