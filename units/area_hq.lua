@@ -42,7 +42,26 @@ local unitDef = {
 
   -- Builder
   builder                       = true,
-  workerTime                    = 0.001,
+  buildDistance                 = 1,
+  workerTime                    = 1,
+  terraformSpeed                = 0,
+
+  buildoptions        = {
+    [[staticheavyradar]],
+    [[staticcon]],
+    [[staticshield]],
+    [[staticrearm]],
+    [[turretlaser]],
+    [[turretmissile]],
+    [[turretriot]],
+    [[turretheavylaser]],
+    [[turrettorp]],
+    [[turretimpulse]],
+    [[turretgauss]],
+    [[turretemp]],
+    [[turretaaflak]],
+    [[turretaaclose]],
+  },
 
   -- Movement & Placement
   footprintX                    = 8,
@@ -68,6 +87,8 @@ local unitDef = {
   -- Other
   customParams                  = {
     soundselect = "building_select1",
+    isfakefactory = 1,
+    notreallyafactory = 1,
   },
 
   featureDefs                   = {

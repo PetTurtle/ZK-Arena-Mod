@@ -102,10 +102,11 @@ local function getHQSpawnPointFor(HQID, ud)
 	local direction = (math.random() < 0.5 and -1) or 1
 	for j = 0, 7 do
 		local spot = (j*direction+startCheck)%8
-		if ud.canFly then
-			return tx, ty + 100, tz
+        local sx, sz = tx + offset[spot].x*(size*4+100), tz + offset[spot].z*(size*4+100)
+        if ud.canFly then
+			return sx, ty, sz
 		end
-		local sx, sz = tx + offset[spot].x*(size*4+100), tz + offset[spot].z*(size*4+100)
+
 		local place, feature = Spring.TestBuildOrder(ud.id, sx, 0 , sz, 1)
 
 		-- also test move order to prevent getting stuck on terrains with 0 speed mult
@@ -241,7 +242,8 @@ local function OnHQSpawn(HQID, HQTeamID, spawnUnitID)
 
     for i = 1, unitCount do
         local sX, sY, sZ = getHQSpawnPointFor(HQID, UnitDefs[udID])
-        local cUnitID = Spring.CreateUnit(udID, sX, sY, sZ, "n", HQTeamID)
+        local cUnitID = GG.DropUnit(UnitDefs[udID].name, sX, sY, sZ, 0, HQTeamID)
+        --local cUnitID = Spring.CreateUnit(udID, sX, sY, sZ, "n", HQTeamID)
 
         if cmdQueue then
             for i = 1, #cmdQueue do
@@ -255,8 +257,27 @@ local function OnHQSpawn(HQID, HQTeamID, spawnUnitID)
     end
 end
 
+function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag, synced)
+    if Spring.GetUnitRulesParam(unitID, "isHQ") and cmdID < 0 then
+        local allyID = Spring.GetUnitAllyTeam(unitID)
+        local metalCost = UnitDefs[-cmdID].metalCost
+        local x, y, z, facing = cmdParams[1], cmdParams[2], cmdParams[3], cmdParams[4]
+
+        if (Spring.IsPosInLos(x, y, z, allyID) or Spring.IsPosInRadar(x, y, z, allyID)) and spendMetal(metalCost, unitTeam) then
+            local newUnitID = Spring.CreateUnit(-cmdID, x, y, z, facing, unitTeam, true)
+            GG.BuildUnit(newUnitID, 4)
+        end
+        return false
+    end
+    return true
+end
+
 function gadget:UnitCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag)
-    if not Spring.GetUnitIsDead(unitID) and Spring.GetUnitRulesParam(unitID, "isHQ") then
+    if Spring.GetUnitIsDead(unitID) then
+        return
+    end
+
+    if Spring.GetUnitRulesParam(unitID, "isHQ") then
 
         if cmdID == 1 then -- Insert cmd
             cmdID = cmdParams[2]
