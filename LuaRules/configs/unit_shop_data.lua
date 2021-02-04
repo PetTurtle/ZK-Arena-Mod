@@ -6,6 +6,7 @@ local tierSize = {
     [5] = 4,
 }
 
+--      "spiderantiheavy", -- widow
 
 local tierUnits = {
     {
@@ -25,16 +26,19 @@ local tierUnits = {
         "planefighter", -- swift
         "jumpraid", -- pyro
         "spiderassault", -- hermit
-        "spiderriot", -- redback
         "vehriot", -- ripper
-        "amphimpulse", -- archer
-        "jumpskirm", -- moderator
         "cloakriot", -- reaver
+        "gunshipbomb", -- blastwing
+        "shieldscout", -- dirtbag
+        "bomberprec", -- raven
     },
     {
+        'bomberriot', -- phoenix
+        "amphimpulse", -- archer
+        "jumpskirm", -- moderator
+        "spiderriot", -- redback
         "spideremp", -- venom
         "shieldassault", -- thug
-        "shieldscout", -- dirtbag
         "vehsupport", -- fencer
         "gunshipemp", -- gnat
         "tankraid", -- kodachi
@@ -42,11 +46,9 @@ local tierUnits = {
         "shieldbomb", -- snitch
         "cloakbomb", -- imp
         "amphbomb", -- limpet
-        "gunshipbomb", -- blastwing
         "tankheavyraid", -- blitz
         "hoverheavyraid", -- bolas
         "cloakheavyraid", -- scythe
-
         "vehassault", -- ravager
         "amphfloater", -- buoy
         "hoverskirm", -- scalpel
@@ -58,14 +60,13 @@ local tierUnits = {
         "gunshipskirm", -- harpy
         "gunshiptrans", -- charon
         "planeheavyfighter", -- raptor
-        "spiderantiheavy", -- widow
         "amphlaunch", -- lobster
-        "veharty", -- badger
         "hoverassault", -- halberd
         "tankriot", -- ogre
         "hoverriot", -- mace
     },
     {
+        "veharty", -- badger
         "jumpblackhole", -- placeholder
         "cloakassault", -- knight
         "vehcapture", -- dominatrix
@@ -78,13 +79,15 @@ local tierUnits = {
         "tankaa", -- ettin
         "gunshipheavytrans", -- hercules
         "planescout", -- owl
-        "jumpscout", -- puppy
-        "gunshipassault", -- revenant
         "tankarty", -- emissary
         "jumpbomb", -- skuttle
         "tankassault", -- minotaur
     },
     {
+        "bomberdisarm", -- thunderbird
+        "bomberheavy", -- likho
+        "gunshipassault", -- revenant
+        "jumpscout", -- puppy
         "striderdante", -- dante
         "jumpsumo", -- jugglenaut
         "shieldfelon", -- felon
