@@ -17,6 +17,10 @@ local buildings = {}
 local buildingCount = 0
 
 local function addUnitAt(ID, unitID, metalPS, metalCost)
+
+    local health, maxHealth = Spring.GetUnitHealth(unitID)
+    Spring.SetUnitHealth(unitID, {health = maxHealth * 0.25})
+
     buildings[ID] = {
         unitID = unitID,
         buildSpeed = metalPS / metalCost,
@@ -38,7 +42,6 @@ local function isValidUnit(unitID)
 end
 
 local function giveMetal(metalAmount, teamID)
-    Spring.Echo(metalAmount)
     local teamMetal = Spring.GetTeamResources(teamID, "metal")
     Spring.SetTeamResource(teamID, "m", teamMetal + metalAmount)
 end
@@ -70,13 +73,13 @@ function gadget:GameFrame(frame)
     for i = 1, buildingCount do
         local building = buildings[i]
         if not (building == nil) then
-            if not isValidUnit(building.unitID) then
+            if not (isValidUnit(building.unitID)) then
                 removeUnitAt(i)
 
             else
                 local health, maxHealth, _, _, buildProgress = Spring.GetUnitHealth(building.unitID)
                 
-                if health then
+                if health and health > 0 then
                     building.metalLeft = building.metalLeft - building.metalPS
 
                     local newHealth = math.min(health + (maxHealth * building.buildSpeed), maxHealth)
