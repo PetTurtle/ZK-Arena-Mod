@@ -265,7 +265,7 @@ function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdO
 
         if (Spring.IsPosInLos(x, y, z, allyID) or Spring.IsPosInRadar(x, y, z, allyID)) and spendMetal(metalCost, unitTeam) then
             local newUnitID = Spring.CreateUnit(-cmdID, x, y, z, facing, unitTeam, true)
-            GG.BuildUnit(newUnitID, 4)
+            GG.BuildUnit(newUnitID, 3)
         end
         return false
     end
