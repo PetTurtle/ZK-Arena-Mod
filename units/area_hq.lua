@@ -43,7 +43,7 @@ local unitDef = {
   -- Builder
   builder                       = true,
   buildDistance                 = 1,
-  workerTime                    = 1,
+  workerTime                    = 3,
   terraformSpeed                = 0,
 
   buildoptions        = {
