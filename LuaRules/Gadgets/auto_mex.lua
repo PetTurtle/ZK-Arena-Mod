@@ -118,9 +118,11 @@ local function upgradeMex(mexID)
     if x then
         local mexTeamID = Spring.GetUnitTeam(mexID)
         local updateID = Spring.CreateUnit(updateUD.id, x, y, z, "n", mexTeamID, true)
-        GG.BuildUnit(updateID, 5)
-        mexs[mexID].buildings[updateID] = true
-        mexHPMulti(mexID, 1)
+        if updateID then
+            GG.BuildUnit(updateID, 5)
+            mexs[mexID].buildings[updateID] = true
+            mexHPMulti(mexID, 1)
+        end
     end
 end
 
