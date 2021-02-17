@@ -23,6 +23,8 @@ local unitDef = {
   energyStorage                 = 100000,
   energyUse                     = 0,
   energyMake                    = 1000,
+  metalUse                     = 0,
+  metalMake                    = 2,
 
   -- Sensors
   activateWhenBuilt             = true,
@@ -47,7 +49,8 @@ local unitDef = {
   terraformSpeed                = 0,
 
   buildoptions        = {
-    [[staticheavyradar]],
+    [[staticmex]],
+    [[staticradar]],
     [[staticcon]],
     [[staticshield]],
     [[staticrearm]],
@@ -55,7 +58,6 @@ local unitDef = {
     [[turretriot]],
     [[turretheavylaser]],
     [[turrettorp]],
-    [[turretimpulse]],
     [[turretemp]],
     [[turretaaflak]],
     [[turretaaclose]],
