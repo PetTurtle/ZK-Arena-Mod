@@ -242,8 +242,7 @@ local function OnHQSpawn(HQID, HQTeamID, spawnUnitID)
 
     for i = 1, unitCount do
         local sX, sY, sZ = getHQSpawnPointFor(HQID, UnitDefs[udID])
-        local cUnitID = GG.DropUnit(UnitDefs[udID].name, sX, sY, sZ, 0, HQTeamID)
-        --local cUnitID = Spring.CreateUnit(udID, sX, sY, sZ, "n", HQTeamID)
+        local cUnitID = GG.DropUnit(UnitDefs[udID].name, sX, sY, sZ, 0, HQTeamID, false, 60)
 
         if cmdQueue then
             for i = 1, #cmdQueue do
