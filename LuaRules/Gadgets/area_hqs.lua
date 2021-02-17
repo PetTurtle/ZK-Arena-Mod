@@ -41,20 +41,25 @@ local function getRandomUnitForTier(tier)
         currentPoolSize = currentPoolSize + unitPools[tier][i]
     end
 
-    local ran = math.random(0, currentPoolSize)
-    for i = 1, #unitPools[tier] do
-        ran = ran - unitPools[tier][i]
-        if ran <= 0 then
-            unitPools[tier][i] = unitPools[tier][i] - 1
-            return tierUnits[tier][i], i
+    if currentPoolSize > 0 then
+        local ran = math.random(1, currentPoolSize)
+        for i = 1, #unitPools[tier] do
+            ran = ran - unitPools[tier][i]
+            if ran <= 0 then
+                unitPools[tier][i] = unitPools[tier][i] - 1
+                return tierUnits[tier][i], tier, i
+            end
         end
     end
 
+    if tier > 1 then
+        return getRandomUnitForTier(tier - 1)
+    end
     return -1
 end
 
 local function getHQUnitTier(HQLevel)
-    local ran = math.random(0, 100)
+    local ran = math.random(1, 100)
     local odds = tierOdds[HQLevel]
     ran = ran - odds[1]
     if (ran <= 0) then return 1 end
@@ -84,8 +89,7 @@ local function rerollHQ(unitID)
             unitPools[udTier][udPoolID] = unitPools[udTier][udPoolID] + 1
         end
 
-        local tier = getHQUnitTier(HQLevel)
-        local unitName, poolID = getRandomUnitForTier(tier)
+        local unitName, tier, poolID = getRandomUnitForTier(getHQUnitTier(HQLevel))
         if not (unitName == -1) then
             local ud = UnitDefNames[unitName].id
             Spring.SetUnitRulesParam(unitID, "HQBuyUnit" .. i, ud, LOS_ACCESS)
@@ -178,8 +182,8 @@ local function OnHQBuy(HQID, HQTeamID, buyUnitID)
         return
     end
 
-    local unitCost = math.floor(UnitDefs[ud].cost)
-    if not spendMetal(unitCost, HQTeamID) then
+    local unitCost = math.floor(UnitDefs[ud].metalCost)
+    if Spring.GetTeamResources(HQTeamID, "metal") < unitCost then
         return
     end
 
@@ -192,6 +196,7 @@ local function OnHQBuy(HQID, HQTeamID, buyUnitID)
             local metalCost = UnitDefs[ud].metalCost
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCount" .. i, count + 1, LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor((metalCost - (metalCost * 0.15 * count)) * (count + 1)), LOS_ACCESS)
+            spendMetal(unitCost, HQTeamID)
             return
         end
     end
@@ -205,9 +210,10 @@ local function OnHQBuy(HQID, HQTeamID, buyUnitID)
 
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnit" .. i, ud, LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCount" .. i, 1, LOS_ACCESS)
-            Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor(UnitDefs[ud].cost), LOS_ACCESS)
+            Spring.SetUnitRulesParam(HQID, "HQSpawnUnitCost" .. i, math.floor(UnitDefs[ud].metalCost), LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitTier" .. i, udTier, LOS_ACCESS)
             Spring.SetUnitRulesParam(HQID, "HQSpawnUnitPoolID" .. i, udPoolID, LOS_ACCESS)
+            spendMetal(unitCost, HQTeamID)
             return
         end
     end
@@ -222,7 +228,8 @@ local function OnHQSell(HQID, HQTeamID, sellUnitID)
 
         local udTier = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitTier" .. sellUnitID)
         local udPoolID = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitPoolID" .. sellUnitID)
-        unitPools[udTier][udPoolID] = unitPools[udTier][udPoolID] + 1
+        local count = Spring.GetUnitRulesParam(HQID, "HQSpawnUnitCount" .. sellUnitID)
+        unitPools[udTier][udPoolID] = unitPools[udTier][udPoolID] + count
     end
 end
 

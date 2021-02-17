@@ -19,6 +19,7 @@ local NEUTRALTEAM = Spring.GetGaiaTeamID()
 local mexDefID = UnitDefNames["staticmex"].id
 local mexFeatureDefID = FeatureDefNames["staticmex_dead"].id
 local mexs = {}
+local mexQueue = {}
 
 local offset = {
 	[0] = {x = 1, z = 0},
@@ -31,7 +32,7 @@ local offset = {
 	[7] = {x = -1, z = 0},
 }
 
-local buildings = {
+local buildings_land = {
     {
         ud = UnitDefNames["energysolar"],
         probability = 60,
@@ -39,6 +40,33 @@ local buildings = {
     {
         ud = UnitDefNames["turretlaser"],
         probability = 30,
+    },
+    {
+        ud = UnitDefNames["turretriot"],
+        probability = 5,
+    },
+    {
+        ud = UnitDefNames["turretheavylaser"],
+        probability = 2,
+    },
+    {
+        ud = UnitDefNames["staticradar"],
+        probability = 3,
+    },
+}
+
+local buildings_water = {
+    {
+        ud = UnitDefNames["energywind"],
+        probability = 60,
+    },
+    {
+        ud = UnitDefNames["turretlaser"],
+        probability = 20,
+    },
+    {
+        ud = UnitDefNames["turrettorp"],
+        probability = 10,
     },
     {
         ud = UnitDefNames["turretriot"],
@@ -68,6 +96,7 @@ local function createMex(x, y, z, teamID)
         hp = 1,
         aliveTime = 5,
         buildings = {},
+        water = (Spring.GetGroundOrigHeight(x, z) < 0)
     }
 end
 
@@ -89,8 +118,9 @@ local function getUpgradeLocation(mexID, ud)
 	return nil
 end
 
-local function getUpgradeUD()
+local function getUpgradeUD(water)
     local ran = math.random(0, 100)
+    local buildings = water and buildings_water or buildings_land
     for i = 1, #buildings do
         ran = ran - buildings[i].probability
         if ran <= 0 then
@@ -112,14 +142,16 @@ local function mexHPMulti(mexID, multiplier)
 end
 
 local function upgradeMex(mexID)
-    local updateUD = getUpgradeUD()
+    local updateUD = getUpgradeUD(mexs[mexID].water)
     local x, y, z = getUpgradeLocation(mexID, updateUD)
     if x then
         local mexTeamID = Spring.GetUnitTeam(mexID)
         local updateID = Spring.CreateUnit(updateUD.id, x, y, z, "n", mexTeamID, true)
-        GG.BuildUnit(updateID, 5)
-        mexs[mexID].buildings[updateID] = true
-        mexHPMulti(mexID, 1)
+        if updateID then
+            GG.BuildUnit(updateID, 5)
+            mexs[mexID].buildings[updateID] = true
+            mexHPMulti(mexID, 1)
+        end
     end
 end
 
@@ -133,6 +165,13 @@ function gadget:GameFrame(frame)
             end
         end
     end
+
+    -- Delay replacement mexes until the next frame after they're destroyed.
+    -- This lets cmd_mex_placement.lua's callbacks happen in the right order to mark the spot with the team-color who now owns it.
+    for _,m in ipairs(mexQueue) do
+        createMex(m.x, m.y, m.z, m.team)
+    end
+    mexQueue = {}
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerDefID, attackerTeam)
@@ -145,7 +184,7 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerD
 
         mexs[unitID] = nil
         local x, y, z = Spring.GetUnitPosition(unitID)
-        createMex(x, y, z, attackerTeam or NEUTRALTEAM)
+        mexQueue[#mexQueue+1] = {x=x, y=y, z=z, team=(attackerTeam or NEUTRALTEAM)}
     end
 end
 

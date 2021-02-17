@@ -15,11 +15,15 @@ end
 
 local function replaceStartUnit(unitName)
     local replacements = {}
+    local hqRadius = 64
     for teamID, spawn in pairs(GG.CommanderSpawnLocation) do
         local _teamID, leader, isDead, isAiTeam = Spring.GetTeamInfo(teamID)
         if _teamID and not isAiTeam then
+            local x = math.max(hqRadius, math.min(Game.mapSizeX - hqRadius, spawn.x))
+            local z = math.max(hqRadius, math.min(Game.mapSizeZ - hqRadius, spawn.z))
+            local y = Spring.GetGroundHeight(x, z)
             local nearbyUnits = Spring.GetUnitsInCylinder(spawn.x, spawn.z, 50, teamID)
-            local unitID = Spring.CreateUnit(unitName, spawn.x, spawn.y, spawn.z, spawn.facing, teamID)
+            local unitID = Spring.CreateUnit(unitName, x, y, z, spawn.facing, teamID)
             Spring.SetUnitRulesParam(unitID, "facplop", 1, {inlos = true})
             Spring.AddTeamResource(teamID, "metal", 300)
             table.insert(replacements, unitID)

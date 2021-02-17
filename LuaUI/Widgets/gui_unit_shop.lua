@@ -59,7 +59,7 @@ local function updateUI()
 	local levelCost = Spring.GetUnitRulesParam(selectedHQID, "HQLevelCost")
 	local rerollCost = Spring.GetUnitRulesParam(selectedHQID, "HQRerollCost")
 
-	if HQLevel == 15 then
+	if HQLevel == 11 then
 		titleLabel:SetCaption("Unit Shop\n Max Level")
 		upgradeButton:SetCaption("Max Level")
 	else
@@ -86,7 +86,7 @@ local function updateUI()
 			buttonImages[i]:Invalidate()
 			buttons[i].backgroundColor = TIER_COLORS[buyUnitTier]
             buttons[i]:Invalidate()
-            buttonCostLabels[i]:SetCaption(math.floor(UnitDefs[ud].cost))
+            buttonCostLabels[i]:SetCaption(math.floor(UnitDefs[ud].metalCost))
 		end
 	end
 end
