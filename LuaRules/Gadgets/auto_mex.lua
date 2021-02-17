@@ -32,7 +32,7 @@ local offset = {
 	[7] = {x = -1, z = 0},
 }
 
-local buildings = {
+local buildings_land = {
     {
         ud = UnitDefNames["energysolar"],
         probability = 60,
@@ -40,6 +40,33 @@ local buildings = {
     {
         ud = UnitDefNames["turretlaser"],
         probability = 30,
+    },
+    {
+        ud = UnitDefNames["turretriot"],
+        probability = 5,
+    },
+    {
+        ud = UnitDefNames["turretheavylaser"],
+        probability = 2,
+    },
+    {
+        ud = UnitDefNames["staticradar"],
+        probability = 3,
+    },
+}
+
+local buildings_water = {
+    {
+        ud = UnitDefNames["energywind"],
+        probability = 60,
+    },
+    {
+        ud = UnitDefNames["turretlaser"],
+        probability = 20,
+    },
+    {
+        ud = UnitDefNames["turrettorp"],
+        probability = 10,
     },
     {
         ud = UnitDefNames["turretriot"],
@@ -69,6 +96,7 @@ local function createMex(x, y, z, teamID)
         hp = 1,
         aliveTime = 5,
         buildings = {},
+        water = (Spring.GetGroundOrigHeight(x, z) < 0)
     }
 end
 
@@ -90,8 +118,9 @@ local function getUpgradeLocation(mexID, ud)
 	return nil
 end
 
-local function getUpgradeUD()
+local function getUpgradeUD(water)
     local ran = math.random(0, 100)
+    local buildings = water and buildings_water or buildings_land
     for i = 1, #buildings do
         ran = ran - buildings[i].probability
         if ran <= 0 then
@@ -113,7 +142,7 @@ local function mexHPMulti(mexID, multiplier)
 end
 
 local function upgradeMex(mexID)
-    local updateUD = getUpgradeUD()
+    local updateUD = getUpgradeUD(mexs[mexID].water)
     local x, y, z = getUpgradeLocation(mexID, updateUD)
     if x then
         local mexTeamID = Spring.GetUnitTeam(mexID)

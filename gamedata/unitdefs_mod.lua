@@ -25,4 +25,9 @@ for _, ud in pairs (UnitDefs) do
             end
         end
     end
+
+    if ud.customparams.pylonrange then
+        -- Let us be a bit sloppy about where to place solars/tidals
+        ud.customparams.pylonrange = math.max(ud.customparams.pylonrange, 90)
+    end
 end
