@@ -7,6 +7,7 @@ local tierSize = {
 }
 
 --      "spiderantiheavy", -- widow
+--      "gunshipbomb", -- blastwing
 
 local tierUnits = {
     {
@@ -28,12 +29,10 @@ local tierUnits = {
         "spiderassault", -- hermit
         "vehriot", -- ripper
         "cloakriot", -- reaver
-        "gunshipbomb", -- blastwing
         "shieldscout", -- dirtbag
-        "bomberprec", -- raven
     },
     {
-        'bomberriot', -- phoenix
+
         "amphimpulse", -- archer
         "jumpskirm", -- moderator
         "spiderriot", -- redback
@@ -66,6 +65,8 @@ local tierUnits = {
         "hoverriot", -- mace
     },
     {
+        "bomberprec", -- raven
+        'bomberriot', -- phoenix
         "veharty", -- badger
         "jumpblackhole", -- placeholder
         "cloakassault", -- knight
