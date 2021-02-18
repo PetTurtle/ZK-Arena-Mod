@@ -91,6 +91,9 @@ local function createMex(x, y, z, teamID)
         end
     end
 
+    -- AI coms usually spawn on mex and get stuck.
+    Spring.SetUnitBlocking(unitID, true, false)
+
     GG.BuildUnit(unitID, 5)
     mexs[unitID] = {
         hp = 1,
