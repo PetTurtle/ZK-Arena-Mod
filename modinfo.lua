@@ -2,7 +2,7 @@ return {
 	name = 'Arena Mod',
 	description = 'An arena mod',
 	shortname = 'zkarena',
-	version = 'v1.0.4',
+	version = 'v1.0.5',
 	mutator = '1',
 	game = 'Zero-K',
 	shortGame = 'ZK',
@@ -11,6 +11,3 @@ return {
 		[[rapid://zk:stable]]
 	},
 }
-
--- ====== TODO =====
--- key bindings
