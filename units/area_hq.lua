@@ -49,7 +49,6 @@ local unitDef = {
   terraformSpeed                = 0,
 
   buildoptions        = {
-    [[staticmex]],
     [[staticradar]],
     [[staticcon]],
     [[staticshield]],
